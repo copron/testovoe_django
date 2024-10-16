@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификация отзывов</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-family: Helvetica, sans-serif;
+            margin: 20px;
+        }
+        h3 {
+            font-size: 32px;
+        }
+        .prediction-0 {
+            color: red;
+        }
+        .prediction-1 {
+            color: green;
+        }
+        .rating {
+            color: blue; /* Цвет для отображения рейтинга */
+        }
+        .error-message {
+            color: red; /* Цвет для сообщения об ошибке */
+            font-weight: bold;
+        }
+        input[type="submit"] {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #444;
+        }
+        .instructions {
+            text-align: left;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <ol>
+            <li>Write a random review in English</li>
+            <li>Click on Prediction</li>
+            <li>Receive sentiment classification with accuracy ≈ 87% and rating prediction.</li>
+        </ol>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <textarea id="review" name="review" rows="4" cols="50" placeholder="Please, write your review here..."></textarea><br><br>
+        <input type="submit" value="Prediction">
+    </form>
+
+    {% if error_message %}
+        <p class="error-message">{{ error_message }}</p>
+    {% endif %}
+
+    {% if sentiment_prediction is not None %}
+        <h3 class="{% if sentiment_prediction == 0 %}prediction-0{% else %}prediction-1{% endif %}">
+            {% if sentiment_prediction == 0 %}Negative Review{% else %}Positive Review{% endif %}
+        </h3>
+    {% endif %}
+
+    {% if rating_prediction is not None %}
+        <h3 class="rating">
+            Predicted Rating: {{ rating_prediction }}
+        </h3>
+    {% endif %}
+
+</body>
+</html>
